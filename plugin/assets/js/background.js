@@ -1,5 +1,4 @@
-import * as Database from "./Database2.js";
-import * as Constants from "./constants.js";
+import * as Database from "./Database.js";
 
 var timedout = false;
 window.jscleaner = {};
