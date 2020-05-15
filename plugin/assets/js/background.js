@@ -108,7 +108,12 @@ Database.createDatabase()
                 labeledScripts = JSON.parse(this.responseText);
                 var script;
                 for (script of labeledScripts) {
-                  Database.addItem("scripts", script);
+                  var tempObj = {
+                    name: script["name"], 
+                    label: script["label"], 
+                    accuracy:"1"
+                  }
+                  Database.addItem("scripts", tempObj);
                 }
                 resolve();
               }
