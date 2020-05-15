@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+  <head>
+    <title>JSCleaner</title>
+    
+    <link rel ="stylesheet" href="../lib/bootstrap-4.3.1/css/bootstrap.min.css">
+    <!-- <link rel ="stylesheet" href="assets/lib/bootstrap-4.3.1/css/bootstrap-toggle.min.css"> -->
+    <script type="text/javascript" src ="../lib/JQuery-3.2.1/jquery-3.2.1.slim.min.js"></script>
+    <script type="text/javascript" src ="../lib/bootstrap-4.3.1/js/bootstrap.bundle.min.js"></script>
+    <!-- <script type="text/javascript" src ="assets/lib/bootstrap-4.3.1/js/bootstrap-toggle.min.js"></script> -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <script src="../js/settings.js"></script>
+
+  </head>
+<style>
+    .main-container{
+        margin: 10em auto ;
+    }
+    .main-container .header img{
+        width: 100px;
+    }
+
+    .main-container .header nav{
+        width: 100%;
+    }
+    .main-container .title-card{
+        width: 400px;
+        /*margin: auto;*/
+    }
+     .main-container .header .title{
+        font-size: 50px;
+    }
+</style>
+<body>
+    <div class="container main-container">
+        <div class="row">
+            <div class="col">
+                <div class="row header title-card ">
+                  <!-- <div class="row"> -->
+                    <div class="col-6 icon">
+                        <img src="../../JSCleaner.png">
+                    </div>
+                    <div class="col-6 title text-center">
+                        JSCleaner
+                    </div>
+    
+                  <!-- </div> -->
+                </div>
+                  <div class = "header row">
+                        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+                                <ul class="navbar-nav">
+                                  <li class="nav-item active">
+                                    <a class="nav-link" href="#">Default Configuration</a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a class="nav-link"> Select all <input type='checkbox' id = "selectAll" class = 'checkbox-script'> </a>
+                                  </li>
+                                 <!--  <li class="nav-item">
+                                    <a class="nav-link" href="#">Export data</a>
+                                  </li> -->
+                                </ul>
+                              </nav>
+                      </div>
+                      
+                
+                <div class="row content">
+                    <div class="col">
+                            <div class="accordion" id="accordionLabels" data-content-type="description">
+
+                            </div>
+                    </div>
+                </div>
+                <div class = "save">
+                  <button type="button" id = "saveDefaultSettings" class="btn btn-primary btn-lg btn-block">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
