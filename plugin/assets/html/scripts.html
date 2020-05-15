@@ -1,230 +1,255 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>JSCleaner</title>
-    
-    
 
-<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-<meta content="utf-8" http-equiv="encoding">
-    <link rel="stylesheet" href="../css/popup.css">
-    <link rel ="stylesheet" href="../lib/bootstrap-4.3.1/css/bootstrap.min.css">
-    <link rel ="stylesheet" href="../lib/bootstrap-4.3.1/css/bootstrap-toggle.min.css">
-    <script src ="../lib/JQuery-3.2.1/jquery-3.2.1.slim.min.js"></script>
-    <script src ="../lib/bootstrap-4.3.1/js/bootstrap.bundle.min.js"></script>
-    <script src ="../lib/bootstrap-4.3.1/js/bootstrap-toggle.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+    <meta content="utf-8" http-equiv="encoding" />
+    <link rel="stylesheet" href="../css/popup.css" />
+    <link
+      rel="stylesheet"
+      href="../lib/bootstrap-4.3.1/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../lib/bootstrap-4.3.1/css/bootstrap-toggle.min.css"
+    />
+    <script src="../lib/JQuery-3.2.1/jquery-3.2.1.slim.min.js"></script>
+    <script src="../lib/bootstrap-4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="../lib/bootstrap-4.3.1/js/bootstrap-toggle.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
     <script src="../js/popup.js"></script>
     <script src="../js/scripts.js"></script>
-</head>
-<style>
-body{
-  width: 500px;
-  height: 800px;
-}
-.main-container{
-  margin: 10px;
-}
-.main-container .header img{
-    width: 40px;
-}
+  </head>
+  <style>
+    body {
+      width: 500px;
+      height: 800px;
+    }
+    .main-container {
+      margin: 10px;
+    }
+    .main-container .header img {
+      width: 40px;
+    }
 
+    span.red {
+      height: 15px;
+      width: 15px;
+      border: solid 1px;
+      background-color: red;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    span.green {
+      height: 15px;
+      width: 15px;
+      border: solid 1px;
+      background-color: green;
+      border-radius: 50%;
+      display: inline-block;
+    }
 
+    .main-container .body .accordion {
+      width: 100%;
+      margin: auto;
+    }
 
-.main-container .body .accordion{
-    width: 100%;
-    margin: auto;
-}
+    .main-container .body .accordion {
+      width: 100%;
+    }
 
-.main-container .body .accordion{
-    width: 100%;
-}
+    .main-container .body .accordion .toggle-site {
+      text-align: right;
+    }
 
-.main-container .body .accordion .toggle-site{
-    text-align: right;
-}
+    .main-container .setting .toggle-site .toggle {
+      width: 100%;
+    }
 
-.main-container .setting .toggle-site .toggle{
-    width: 100%;
-}
+    .main-container .setting .container {
+      /* text-align: center; */
+      float: right;
+    }
 
-.main-container .setting .container{
-    /* text-align: center; */
-    float: right;
-}
+    .main-container .setting .wrapper {
+      margin: 1em;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
 
-.main-container .setting .wrapper{
-    margin: 1em;
-}
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
 
-.switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: 0.4s;
+      transition: 0.4s;
+    }
 
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: 0.4s;
+      transition: 0.4s;
+    }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
+    input:checked + .slider {
+      background-color: red;
+    }
 
-input:checked + .slider {
-  background-color: red;
-}
+    input:focus + .slider {
+      box-shadow: 0 0 1px red;
+    }
 
-input:focus + .slider {
-  box-shadow: 0 0 1px red;
-}
+    input:checked + .slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
 
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
+    /* Rounded sliders */
+    .slider.round {
+      border-radius: 34px;
+    }
 
-/* Rounded sliders */
-.slider.round {
-  border-radius: 34px;
-}
+    .slider.round:before {
+      border-radius: 50%;
+    }
 
-.slider.round:before {
-  border-radius: 50%;
-}
+    .main-container .setting .container {
+      display: block;
+      position: relative;
+      padding-left: 35px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      font-size: 22px;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
 
+    /* Hide the browser's default checkbox */
+    .main-container .setting .container input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+    .accordion .card {
+      width: 100%;
+    }
+    /* Create a custom checkbox */
+    .main-container .setting .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 25px;
+      width: 25px;
+      background-color: #eee;
+    }
 
+    /* On mouse-over, add a grey background color */
+    .main-container .setting .container:hover input ~ .checkmark {
+      background-color: #ccc;
+    }
 
-.main-container .setting .container {
-  display: block;
-  position: relative;
-  padding-left: 35px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  font-size: 22px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
+    /* When the checkbox is checked, add a blue background */
+    .main-container .setting .container input:checked ~ .checkmark {
+      background-color: #2196f3;
+    }
 
-/* Hide the browser's default checkbox */
-.main-container .setting .container input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-.accordion .card{
-  width: 100%;
-}
-/* Create a custom checkbox */
-.main-container .setting .checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 25px;
-  width: 25px;
-  background-color: #eee;
-}
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .main-container .setting .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
 
-/* On mouse-over, add a grey background color */
-.main-container .setting .container:hover input ~ .checkmark {
-  background-color: #ccc;
-}
+    /* Show the checkmark when checked */
+    .main-container .setting .container input:checked ~ .checkmark:after {
+      display: block;
+    }
 
-/* When the checkbox is checked, add a blue background */
-.main-container .setting .container input:checked ~ .checkmark {
-  background-color: #2196F3;
-}
+    /* Style the checkmark/indicator */
+    .main-container .scriptLabels .container .checkmark:after {
+      left: 9px;
+      top: 5px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 3px 3px 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
+    #bodyContainer #saveCustom {
+      width: 100%;
+      /*border: none;*/
+      margin: 5%;
+      padding: 5%;
+    }
 
-/* Create the checkmark/indicator (hidden when not checked) */
-.main-container .setting .checkmark:after {
-  content: "";
-  position: absolute;
-  display: none;
-}
-
-/* Show the checkmark when checked */
-.main-container .setting .container input:checked ~ .checkmark:after {
-  display: block;
-}
-
-/* Style the checkmark/indicator */
-.main-container .scriptLabels .container .checkmark:after {
-  left: 9px;
-  top: 5px;
-  width: 5px;
-  height: 10px;
-  border: solid white;
-  border-width: 0 3px 3px 0;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
-}
-#bodyContainer #saveCustom{
-  width: 100%;
-  /*border: none;*/
-  margin: 5%;
-  padding: 5%;
-  
-}
-
-/*.scriptLabels  .modes:hover{
+    /*.scriptLabels  .modes:hover{
     color:brown;
     background-color: white;
 }*/
-</style>
+  </style>
   <body>
-    <div class= "main-container"> 
-        <div class = "container" id = "body">
-            <div class= "row header" >
-                <div class="col-2 icon">
-                    <button id="home"><img src="../../JSCleaner.png"></button>
-                </div>
-                <div class="col-5 title">
-                    JSCleaner
-                </div>
-                <div class="col-2 settings text-center">
-                    <button id="settings" class = "menu"><i class="fa fa-cog fa-fw"></i></button>
-                </div>
-                <div class="col-2 settings text-center">
-                    <button id="reload" class = "menu"><i class="fa fa-refresh"></i></button>
-                </div>
-            </div>
-            <div class= "row body scriptLabels">
-              <div class = "col" id="bodyContainer">
-                  <div id="mode"class ="row">
-                  </div>
-                   <div class="accordion row" id="accordionLabels" data-content-type="scripts">
-                  </div>
-              </div>
-            </div>
+    <div class="main-container">
+      <div class="container" id="body">
+        <div class="row header">
+          <div class="col-2 icon">
+            <button id="home"><img src="../../JSCleaner.png" /></button>
+          </div>
+          <div class="col-5 title">
+            JSCleaner
+          </div>
+          <div class="col-2 settings text-center">
+            <button id="settings" class="menu">
+              <i class="fa fa-cog fa-fw"></i>
+            </button>
+          </div>
+          <div class="col-2 settings text-center">
+            <button id="reload" class="menu">
+              <i class="fa fa-refresh"></i>
+            </button>
+          </div>
         </div>
+        <div class="row body scriptLabels">
+          <div class="col" id="bodyContainer">
+            <div id="mode" class="row"></div>
+            <div
+              class="accordion row"
+              id="accordionLabels"
+              data-content-type="scripts"
+            ></div>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- <button id="checkPage">Check this page now!</button> -->
   </body>
