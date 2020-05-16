@@ -76,23 +76,27 @@ Database.createDatabase()
         // timedout = false;
         var requestString = "";
         for (let ele of scripts) {
-          requestString = requestString + encodeURIComponent(ele) + "*****";
+          requestString = requestString + encodeURIComponent(ele) + ",";
         }
-        requestString = requestString.substr(0, requestString.length - 5);
+        requestString = requestString.substr(0, requestString.length - 1);
         //send an ajax request
         // console.log("REQUEST TO PROXY: ", requestString);
 
         function reqListener() {
-          var tempObj;
-          // console.log("RESPONSE FROM PROXY: ", this.responseText);
+                  
+          console.log("RESPONSE FROM PROXY: ", this.responseText);
+          //parses the response and adds it to the database
           labelledScripts = JSON.parse(this.responseText);
-          console.log(labelledScripts);
           var script;
           for (script of labelledScripts) {
-            Database.addItem(script, "scripts");
+            var tempObj = {
+              name: script["name"],
+              label: script["label"],
+              accuracy: "1",
+            };
+            Database.addItem("scripts", tempObj);
           }
           labelledScripts = [];
-
         }
 
         var oReq = new XMLHttpRequest();
@@ -100,7 +104,7 @@ Database.createDatabase()
 
         oReq.open(
           "GET",
-          "http://92.99.20.210:9000/JSCleaner/JSCleanerFinal/JSLabel.py?url=" + requestString
+          "http://92.99.20.210:9000/JSCleaner/JSCleanerFinal/JSLabelBatch.py?url=" + requestString
         );
         oReq.send();
         var count = 0;
@@ -121,7 +125,7 @@ Database.createDatabase()
           if (
             (requestDetails.url.search(".js") !== -1 &&
               requestDetails.url.search(
-                "http://92.99.20.210:9000/JSCleaner/JSCleanerFinal/JSLabel.py"
+                "http://92.99.20.210:9000/JSCleaner/JSCleanerFinal/JSLabelBatch.py"
               ) === -1) ||
             requestDetails.type === "script"
           ) {
@@ -137,9 +141,9 @@ Database.createDatabase()
               
                 var requestString = "";
                 for (var script of scripts){
-                  requestString = requestString + encodeURIComponent(script) +  "*****"
+                  requestString = requestString + encodeURIComponent(script) +  ","
                 }
-                requestString = requestString.substr(0, requestString.length - 5); //removes the last comma
+                requestString = requestString.substr(0, requestString.length - 1); //removes the last comma
                 function reqListener() {
                   
                   console.log("RESPONSE FROM PROXY: ", this.responseText);
@@ -163,7 +167,7 @@ Database.createDatabase()
 
                 oReq.open(
                   "GET",
-                  "http://92.99.20.210:9000/JSCleaner/JSCleanerFinal/JSLabel.py?url=" +
+                  "http://92.99.20.210:9000/JSCleaner/JSCleanerFinal/JSLabelBatch.py?url=" +
                     requestString
                 );
                 oReq.send();
@@ -186,7 +190,6 @@ Database.createDatabase()
               var Obj;
               var tempObj;
 
-              browser.tabs.sendMessage(requestDetails.tabId, tempObj);
               if (disabled_labels.includes(ifLabelled.label)) {
                 Obj = {
                   name: requestDetails.url,
@@ -197,6 +200,7 @@ Database.createDatabase()
                   message: Obj,
                   subject: "script",
                 };
+                browser.tabs.sendMessage(requestDetails.tabId, tempObj);
                 resolve({ cancel: true });
               } else {
                 //if not disabled
