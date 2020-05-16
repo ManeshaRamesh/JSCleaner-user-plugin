@@ -1,0 +1,55 @@
+body{
+    width: 400px;
+    height: 200px;
+}
+
+
+
+.main-container .header img{
+    width: 50px;
+
+}
+.main-container .header {
+    padding: 1em;
+    text-align: left;
+}
+
+
+.main-container .header .title {
+    font-family:Arial, Helvetica, sans-serif;
+    font-size: 2em;
+    font-style: bold;
+}
+.main-container .header .settings {
+    text-align: right;
+}
+
+.main-container .header .settings i {
+    font-size: 2em ; 
+    vertical-align: baseline;
+}
+
+.main-container .header .icon button {
+    background-color: white;
+    border: none;
+    padding : 0px;
+}
+.main-container .body .popup-buttons button {
+    color: white;
+    border: none;
+    background-color: brown;
+    margin: 1em;
+    padding: 1em;
+    width: 100%;
+}
+
+.main-container .body .popup-buttons button:hover{
+    color:brown;
+    background-color: white;
+}
+
+.main-container .body .popup-buttons{
+    justify-content: center;
+}
+
+

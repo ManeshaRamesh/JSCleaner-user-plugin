@@ -3,6 +3,8 @@ import * as Database from "./Database.js";
 var timedout = false;
 window.jscleaner = {};
 window.jscleaner.tabs = [];
+var scripts = [];
+var labelledScripts = [];
 
 window.jscleaner.labels = [
   "Marketing",
@@ -21,6 +23,12 @@ window.jscleaner.labels = [
   "Noncritical",
 ];
 
+// Background script runs in the following order:
+
+// 1. Creates a database
+// 2. add listenre at onBeforeSendHeaders
+// 3. Add  listener to the changing of the local storage to update the disabled scripts
+
 var disabled_labels = [];
 //creates a database
 Database.createDatabase()
@@ -37,7 +45,7 @@ Database.createDatabase()
         window.jscleaner.labels.forEach((element) => {
           obj = {
             label: element,
-            status: 0,
+            status: 1,
           };
           settingDefault.push(obj); // enables all scripts - does not block anything unless set otherwise
         });
@@ -58,28 +66,53 @@ Database.createDatabase()
       return disabled_labels;
     });
   })
-  // .then(() => {
-  //   chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  //     // First, validate the message's structure.
-
-  //     if (msg.from === "popup" && msg.subject === "urlUpdate") {
-  //       var URLscripts = [];
-  //       var tempObj = {};
-  //       // console.log("Recieved from content script: ",msg.content);
-  //       msg.content.scripts.forEach((value, key, map) => {
-  //         // console.log("element", value, " ", key);
-  //         tempObj = {
-  //           name: key,
-  //           label: value.label,
-  //           status: value.status,
-  //         };
-  //         URLscripts.push(tempObj);
-  //       });
-  //       // console.log(Database.URLExceptions.get(msg.content))
-  //     }
-  //   });
-  // })
   .then(() => {
+
+    // timeout in case the scripts array does not fill up 
+
+    setInterval(() => {
+      if (scripts.length) {
+        // console.log("print add item - here1")
+        // timedout = false;
+        var requestString = "";
+        for (let ele of scripts) {
+          requestString = requestString + encodeURIComponent(ele) + "*****";
+        }
+        requestString = requestString.substr(0, requestString.length - 5);
+        //send an ajax request
+        // console.log("REQUEST TO PROXY: ", requestString);
+
+        function reqListener() {
+          var tempObj;
+          // console.log("RESPONSE FROM PROXY: ", this.responseText);
+          labelledScripts = JSON.parse(this.responseText);
+          console.log(labelledScripts);
+          var script;
+          for (script of labelledScripts) {
+            Database.addItem(script, "scripts");
+          }
+          labelledScripts = [];
+
+        }
+
+        var oReq = new XMLHttpRequest();
+        oReq.addEventListener("load", reqListener);
+
+        oReq.open(
+          "GET",
+          "http://92.99.20.210:9000/JSCleaner/JSLabel.py?url=" + requestString
+        );
+        oReq.send();
+        var count = 0;
+        // oReq.timeout = 5000;
+        oReq.onerror = function (e) {
+
+        };
+
+        scripts = [];
+
+      }
+    }, 5000);
     console.log("Added blocking listener");
     browser.webRequest.onBeforeSendHeaders.addListener(
       function (requestDetails) {
@@ -88,7 +121,7 @@ Database.createDatabase()
           if (
             (requestDetails.url.search(".js") !== -1 &&
               requestDetails.url.search(
-                "http://92.99.20.210:9000/JSCleaner/JSLabel2.py"
+                "http://92.99.20.210:9000/JSCleaner/JSLabel.py"
               ) === -1) ||
             requestDetails.type === "script"
           ) {
@@ -99,44 +132,55 @@ Database.createDatabase()
             );
             //if not in database
             if (!ifLabelled) {
-              //creates a requeststring
-              var requestString = encodeURIComponent(requestDetails.url);
-              function reqListener() {
-                var labeledScripts;
-                console.log("RESPONSE FROM PROXY: ", this.responseText);
-                //parses the response and adds it to the database
-                labeledScripts = JSON.parse(this.responseText);
-                var script;
-                for (script of labeledScripts) {
-                  var tempObj = {
-                    name: script["name"], 
-                    label: script["label"], 
-                    accuracy:"1"
-                  }
-                  Database.addItem("scripts", tempObj);
+              scripts.push(requestDetails.url); // add to the list of scripts
+              if (scripts.length === 5) { // if script reaches a limit of 5 send the request to the proxy
+              
+                var requestString = "";
+                for (var script of scripts){
+                  requestString = requestString + encodeURIComponent(script) +  "*****"
                 }
-                resolve();
-              }
-              //craetes a request
-              var oReq = new XMLHttpRequest();
-              oReq.addEventListener("load", reqListener);
+                requestString = requestString.substr(0, requestString.length - 5); //removes the last comma
+                function reqListener() {
+                  
+                  console.log("RESPONSE FROM PROXY: ", this.responseText);
+                  //parses the response and adds it to the database
+                  labelledScripts = JSON.parse(this.responseText);
+                  var script;
+                  for (script of labelledScripts) {
+                    var tempObj = {
+                      name: script["name"],
+                      label: script["label"],
+                      accuracy: "1",
+                    };
+                    Database.addItem("scripts", tempObj);
+                  }
+                  labelledScripts = [];
+                  resolve();
+                }
+                //craetes a request
+                var oReq = new XMLHttpRequest();
+                oReq.addEventListener("load", reqListener);
 
-              oReq.open(
-                "GET",
-                "http://92.99.20.210:9000/JSCleaner/JSLabel2.py?url=" +
-                  requestString
-              );
-              oReq.send();
-              var count = 0;
-              oReq.timeout = 5000;
-              oReq.onerror = function (e) {
-                console.log("Server Error: contact administrator" + e);
-                reject();
-              };
-              // oReq.ontimeout = function (e) {
-              //   console.log("Request has timedout: ", e);
-              //   reject();
-              // };
+                oReq.open(
+                  "GET",
+                  "http://92.99.20.210:9000/JSCleaner/JSLabel.py?url=" +
+                    requestString
+                );
+                oReq.send();
+                var count = 0;
+                oReq.timeout = 5000;
+                oReq.onerror = function (e) {
+                  console.log("Server Error: contact administrator" + e);
+                  reject();
+                };
+                // oReq.ontimeout = function (e) {
+                //   console.log("Request has timedout: ", e);
+                //   reject();
+                // };
+                scripts= []
+
+              }
+              //creates a requeststring
             } else {
               console.log("In database", ifLabelled);
               var Obj;

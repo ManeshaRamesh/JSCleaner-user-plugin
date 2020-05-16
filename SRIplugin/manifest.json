@@ -1,0 +1,35 @@
+{
+  "manifest_version": 2,
+
+  "name": "JSCleaner Plugin",
+  "description": "This extension will block scripts based on  machine learning model",
+  "version": "1.0",
+  "content_security_policy": "script-src 'self' https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css; object-src https://code.jquery.com/jquery-3.2.1.slim.min.js 'self'",
+  "browser_action": {
+    "default_icon": "JSCleaner.png",
+    "default_popup": "assets/html/popup.html"
+  },
+  "background": {
+    "page": "assets/html/background.html"
+  },
+  "content_scripts": [
+    {
+      "run_at": "document_start",
+      "matches": ["<all_urls>"],
+      "css": ["assets/css/main.css"],
+      "js": ["assets/js/contentscript.js"]
+    }
+  ],
+  "web_accessible_resources": ["/assets/html/", "/assets/lib/", "/assets/js/"],
+
+  "permissions": [
+    "activeTab",
+    "webRequest",
+    "storage",
+    "tabs",
+    "http://*/*",
+    "https://*/*",
+    "http://92.99.20.210:9000/JSCleaner/",
+    "webRequestBlocking"
+  ]
+}
