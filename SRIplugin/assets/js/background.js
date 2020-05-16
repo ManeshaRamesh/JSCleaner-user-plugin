@@ -88,7 +88,7 @@ Database.createDatabase()
           if (
             (requestDetails.url.search(".js") !== -1 &&
               requestDetails.url.search(
-                "http://92.99.20.210:9000/JSCleaner/JSLabel2.py"
+                "http://92.99.20.210:9000/JSCleaner/JSCleanerFinal/JSLabel.py"
               ) === -1) ||
             requestDetails.type === "script"
           ) {
@@ -123,7 +123,7 @@ Database.createDatabase()
 
               oReq.open(
                 "GET",
-                "http://92.99.20.210:9000/JSCleaner/JSLabel2.py?url=" +
+                "http://92.99.20.210:9000/JSCleaner/JSCleanerFinal/JSLabel.py?url=" +
                   requestString
               );
               oReq.send();
@@ -142,7 +142,6 @@ Database.createDatabase()
               var Obj;
               var tempObj;
 
-              browser.tabs.sendMessage(requestDetails.tabId, tempObj);
               if (disabled_labels.includes(ifLabelled.label)) {
                 Obj = {
                   name: requestDetails.url,
@@ -153,6 +152,8 @@ Database.createDatabase()
                   message: Obj,
                   subject: "script",
                 };
+                browser.tabs.sendMessage(requestDetails.tabId, tempObj);
+
                 resolve({ cancel: true });
               } else {
                 //if not disabled

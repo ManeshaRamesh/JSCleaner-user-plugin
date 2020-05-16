@@ -100,7 +100,7 @@ Database.createDatabase()
 
         oReq.open(
           "GET",
-          "http://92.99.20.210:9000/JSCleaner/JSLabel.py?url=" + requestString
+          "http://92.99.20.210:9000/JSCleaner/JSCleanerFinal/JSLabel.py?url=" + requestString
         );
         oReq.send();
         var count = 0;
@@ -121,7 +121,7 @@ Database.createDatabase()
           if (
             (requestDetails.url.search(".js") !== -1 &&
               requestDetails.url.search(
-                "http://92.99.20.210:9000/JSCleaner/JSLabel.py"
+                "http://92.99.20.210:9000/JSCleaner/JSCleanerFinal/JSLabel.py"
               ) === -1) ||
             requestDetails.type === "script"
           ) {
@@ -131,7 +131,7 @@ Database.createDatabase()
               requestDetails.url
             );
             //if not in database
-            if (!ifLabelled) {
+            if (!ifLabelled && !scripts.includes(requestDetails.url)){
               scripts.push(requestDetails.url); // add to the list of scripts
               if (scripts.length === 5) { // if script reaches a limit of 5 send the request to the proxy
               
@@ -163,7 +163,7 @@ Database.createDatabase()
 
                 oReq.open(
                   "GET",
-                  "http://92.99.20.210:9000/JSCleaner/JSLabel.py?url=" +
+                  "http://92.99.20.210:9000/JSCleaner/JSCleanerFinal/JSLabel.py?url=" +
                     requestString
                 );
                 oReq.send();
